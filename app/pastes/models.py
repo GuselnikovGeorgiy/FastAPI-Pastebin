@@ -10,7 +10,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.users.models import Users
 
 
-uuid_pk = Annotated[uuid.UUID, mapped_column(primary_key=True, default=str(uuid.uuid4()))]
+uuid_pk = Annotated[
+    uuid.UUID, mapped_column(primary_key=True, default=str(uuid.uuid4()))
+]
 
 created_at = Annotated[
     datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"))
@@ -32,7 +34,7 @@ class Pastes(Base):
     body: Mapped[str]
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    user_id: Mapped[uuid_pk] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
 
     users: Mapped["Users"] = relationship(back_populates="pastes")
 

@@ -7,7 +7,9 @@ from app.database import Base
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 
-uuid_pk = Annotated[uuid.UUID, mapped_column(primary_key=True, default=str(uuid.uuid4()))]
+uuid_pk = Annotated[
+    uuid.UUID, mapped_column(primary_key=True, default=str(uuid.uuid4()))
+]
 
 
 class Users(Base):
