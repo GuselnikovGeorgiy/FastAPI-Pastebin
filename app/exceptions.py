@@ -14,6 +14,11 @@ class UserAlreadyExistsException(PastebinException):
     detail = "Пользователь уже существует"
 
 
+class UsernameAlreadyExistsException(PastebinException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Пользователь с таким именем уже существует"
+
+
 class IncorrectEmailOrPasswordException(PastebinException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Неверная почта или пароль"
