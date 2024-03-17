@@ -1,21 +1,33 @@
-from datetime import datetime
-from typing import Optional
+import datetime
+from typing import Optional, Annotated
+from uuid import UUID
 
-from sqlalchemy import ForeignKey, Date, String
+from sqlalchemy import ForeignKey, Date, String, text
 from app.database import Base
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.users.models import Users
+
+
+uuid_pk = Annotated[UUID, mapped_column(primary_key=True)]
+created_at = Annotated[datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now()"))]
+updated_at = Annotated[datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now()"),
+                                                        onupdate=datetime.datetime.utcnow,
+                                                        )]
 
 
 class Pastes(Base):
     __tablename__ = "pastes"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[uuid_pk]
     title: Mapped[str] = mapped_column(String(200))
     body: Mapped[str]
-    is_private: Mapped[bool]
-    hashed_password: Mapped[Optional[str]]
-    expire_date: Mapped[datetime] = mapped_column(Date)
-    num_views: Mapped[int]
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    created_at: Mapped[created_at]
+    updated_at: Mapped[updated_at]
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'))
 
+    users: Mapped["Users"] = relationship(back_populates="pastes")
+
+    def __str__(self):
+        return f"Paste: {self.title}"
 

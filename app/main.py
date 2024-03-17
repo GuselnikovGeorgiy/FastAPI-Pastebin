@@ -14,6 +14,19 @@ from app.users.router import router as router_users
 from app.pastes.router import router as router_pastes
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # при запуске
+    redis = aioredis.from_url(
+        f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}",
+        encoding="utf8",
+        decode_responses=True,
+    )
+    FastAPICache.init(RedisBackend(redis), prefix="cache")
+    yield
+    # при выключении
+
+
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="app/static"), "static")
@@ -30,16 +43,11 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
-    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
-                   "Access-Authorization"],
+    allow_headers=[
+        "Content-Type",
+        "Set-Cookie",
+        "Access-Control-Allow-Headers",
+        "Access-Control-Allow-Origin",
+        "Access-Authorization",
+    ],
 )
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # при запуске
-    redis = aioredis.from_url(f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}", encoding="utf8", decode_responses=True)
-    FastAPICache.init(RedisBackend(redis), prefix="cache")
-    yield
-    # при выключении
-
