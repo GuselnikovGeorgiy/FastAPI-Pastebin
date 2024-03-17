@@ -30,8 +30,8 @@ class Pastes(Base):
     __tablename__ = "pastes"
 
     id: Mapped[uuid_pk]
-    title: Mapped[str] = mapped_column(String(200))
-    body: Mapped[str]
+    title: Mapped[Optional[str]] = mapped_column(String(200), default="Blank Paste")
+    body: Mapped[Optional[str]] = mapped_column(default="")
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
     user_id: Mapped[uuid_pk] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))

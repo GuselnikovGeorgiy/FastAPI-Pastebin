@@ -20,7 +20,7 @@ class IncorrectEmailOrPasswordException(PastebinException):
 
 
 class TokenExpiredException(PastebinException):
-    status_code=status.HTTP_401_UNAUTHORIZED
+    status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Срок действия токена истек"
 
 
@@ -38,3 +38,6 @@ class UserIsNotPresentException(PastebinException):
     status_code = status.HTTP_401_UNAUTHORIZED
 
 
+class NotFoundException(PastebinException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = "Не удалось найти страницу"
