@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 
 uuid_pk = Annotated[
-    uuid.UUID, mapped_column(primary_key=True, default=str(uuid.uuid4()))
+    uuid.UUID, mapped_column(primary_key=True, default=func.gen_random_uuid())
 ]
 
 
