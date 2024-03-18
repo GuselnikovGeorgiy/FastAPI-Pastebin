@@ -41,4 +41,8 @@ async def logout_user(response: Response):
 
 @router.get("/me")
 async def get_me(current_user: Users = Depends(get_current_user)):
-    return current_user
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "email": current_user.email,
+    }
