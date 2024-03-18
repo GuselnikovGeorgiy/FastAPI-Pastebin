@@ -1,3 +1,0 @@
-migrations/versions/*.py
-**/__pycache__/
-**/.idea/
